@@ -35,6 +35,8 @@ spec:
               type: array
             clusterID:
               type: string
+            defaultCluster:
+              type: boolean
             credentialsSecretName:
               type: string
             insecureRegistry:
