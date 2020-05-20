@@ -57,7 +57,7 @@ func Add(mgr manager.Manager) error {
 // newReconciler returns a new reconcile.Reconciler
 func newReconciler(mgr manager.Manager, k8sclient kubernetes.Interface) reconcile.Reconciler {
 
-	reconcilerBase := util.NewReconcilerBase(mgr.GetClient(), mgr.GetScheme(), mgr.GetConfig(), mgr.GetRecorder("namespace-controller"))
+	reconcilerBase := util.NewReconcilerBase(mgr.GetClient(), mgr.GetScheme(), mgr.GetConfig(), mgr.GetEventRecorderFor("namespace-controller"))
 
 	coreComponents := core.NewCoreComponents(reconcilerBase)
 
@@ -142,7 +142,7 @@ func (r *ReconcileNamespace) Reconcile(request reconcile.Request) (reconcile.Res
 	// Find the Current Registered QuayIntegration objects
 	quayIntegrations := redhatcopv1alpha1.QuayIntegrationList{}
 
-	err = r.coreComponents.ReconcilerBase.GetClient().List(context.TODO(), &client.ListOptions{}, &quayIntegrations)
+	err = r.coreComponents.ReconcilerBase.GetClient().List(context.TODO(), &quayIntegrations)
 
 	if err != nil {
 		return r.coreComponents.ManageError(&core.QuayIntegrationCoreError{
@@ -341,7 +341,7 @@ func (r *ReconcileNamespace) setupResources(request reconcile.Request, namespace
 	// Synchronize Namespaces
 	imageStreams := imagev1.ImageStreamList{}
 
-	err := r.coreComponents.ReconcilerBase.GetClient().List(context.TODO(), &client.ListOptions{Namespace: namespace.Name}, &imageStreams)
+	err := r.coreComponents.ReconcilerBase.GetClient().List(context.TODO(), &imageStreams, &client.ListOptions{Namespace: namespace.Name})
 
 	if err != nil {
 		return r.coreComponents.ManageError(&core.QuayIntegrationCoreError{
