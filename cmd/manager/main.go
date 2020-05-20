@@ -19,6 +19,7 @@ import (
 	"github.com/redhat-cop/quay-openshift-registry-operator/pkg/constants"
 	"github.com/redhat-cop/quay-openshift-registry-operator/pkg/controller"
 	"github.com/redhat-cop/quay-openshift-registry-operator/pkg/webhook"
+	"github.com/redhat-cop/quay-openshift-registry-operator/version"
 
 	buildv1 "github.com/openshift/api/build/v1"
 	imagev1 "github.com/openshift/api/image/v1"
