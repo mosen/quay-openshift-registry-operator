@@ -16,6 +16,7 @@ import (
 // +k8s:openapi-gen=true
 type QuayIntegrationSpec struct {
 	ClusterID                  string   `json:"clusterID"`
+	PrimaryCluster             bool     `json:"primaryCluster"`
 	CredentialsSecretName      string   `json:"credentialsSecretName"`
 	OrganizationPrefix         string   `json:"organizationPrefix,omitempty"`
 	QuayHostname               string   `json:"quayHostname"`
@@ -69,7 +70,11 @@ var (
 )
 
 func (qi *QuayIntegration) GenerateQuayOrganizationNameFromNamespace(namespace string) string {
-	return fmt.Sprintf("%s_%s", strings.ToLower(qi.Spec.ClusterID), namespace)
+	if qi.Spec.PrimaryCluster {
+		return namespace
+	} else {
+		return fmt.Sprintf("%s_%s", strings.ToLower(qi.Spec.ClusterID), namespace)
+	}
 }
 
 // IsAllowedNamespace returns whether a namespace is allowed to be managed.
